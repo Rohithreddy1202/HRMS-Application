@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HRMS 1.0</title>
+    <link rel="stylesheet" href="hello.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" xintegrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="image1.png" alt="Logo" />
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">🔒 LOGIN ▼</button>
+            <div id="loginDropdown" class="dropdown-content">
+                <a href="#" onclick="showAdminForm()">Admin</a>
+                <a href="#" onclick="showEmployeeForm()">Employee</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="header">Human Resource Management System 1.0</div>
+        <div class="content" id="dashboard">
+            <h1><span style="color: rgb(233, 243, 245)">HRMS</span></h1>
+            <h2>(Human Resource Management System)</h2>
+        </div>
+        <div class="content" id="employeeForm" style="display: none">
+            <div class="login-box">
+                <div class="login-header">EMPLOYEE LOGIN</div>
+                <div class="login-body">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label>Username <span style="color: red">*</span></label>
+                            <input type="email" id="username" placeholder="Enter your email" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Password <span style="color: red">*</span></label>
+                            <input type="password" id="password" placeholder="Enter your password" required/>
+                        </div>
+                        <div class="form-footer">
+                            <button type="reset" class="btn btn-clear">❌ Clear</button>
+                            <button type="submit" class="btn btn-login">➡️ Login</button>
+                        </div>
+                        <br />
+                        <a href="#" class="forgot" onclick="showForgotPasswordPopup()">Forgot Password?</a>
+                        <br /><br />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="appContainer" style="display: none">
+        <nav class="app-sidebar">
+            <div class="logo">
+                <img src="image1.png" class="img" alt="User Avatar"/>
+            </div>
+            <ul>
+                <li data-section="dashboard1"><i class="fa-solid fa-gauge"></i>Dashboard</li>
+                <li data-section="profile"><i class="fa-regular fa-user"></i> My Profile</li>
+                <li data-section="change-password"><i class="fa-solid fa-key"></i> Change Password</li>
+                <li data-section="leave-application"><i class="fa-regular fa-envelope"></i> Leave Application</li>
+                <li data-section="leave-balance"><i class="fa-solid fa-scale-balanced"></i> Leave Balance</li>
+                <li data-section="calender"><i class="fa-solid fa-calendar"></i> Calendar</li>
+                <li data-section="events"><i class="fa-regular fa-calendar-days"></i> Events</li>
+                <li data-section="timings"><i class="fa-solid fa-right-to-bracket"></i>Employee Login/Logout</li>
+            </ul>
+        </nav>
+        
+        <nav class="admin-sidebar hidden">
+            <div class="logo">
+                <img src="image1.png" class="img" alt="User Avatar"/>
+            </div>
+            <ul>
+                <li data-section="admin-dashboard-section"><i class="fa-solid fa-gauge"></i> Admin Dashboard</li>
+                <li data-section="admin-register-employee"><i class="fa-solid fa-user-plus"></i> Register Employee</li>
+                <li data-section="admin-manage-employees"><i class="fa-solid fa-users"></i> Manage Employees</li>
+                <li data-section="admin-leave-requests"><i class="fa-solid fa-envelope-open-text"></i> Leave Requests</li>
+                <li data-section="admin-compoff-requests"><i class="fa-solid fa-calendar-check"></i> Comp-off Requests</li>
+                <li data-section="admin-reset-password"><i class="fa-solid fa-key"></i> Reset Employee Password</li>
+            </ul>
+        </nav>
+
+        <main class="profilee-section">
+            <header class="top-bar">
+                <div class="title">Human Resource Management System 1.0</div>
+                <div class="user-info">
+                    <div class="notification-wrapper">
+                        <i class="fa-solid fa-bell" id="bellIcon"></i>
+                        <span class="notification-dot hidden" id="notificationDot"></span>
+                        <div class="notification-dropdown hidden" id="notificationDropdown">
+                            <div class="notification-item">No new notifications</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-user"></i>
+                    <span class="username" id="signOutTrigger">User</span>
+                </div>
+            </header>
+
+            <section id="default-section">
+                <h2>Welcome! <span id="welcomeName"></span></h2>
+            </section>
+
+            <section id="dashboard1" class="hidden">
+                <h2>Welcome! <span id="welcomeName1"></span></h2>
+            </section>
+            <section id="profile" class="hidden">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <img src="image3.png" alt="Profile Picture" class="profile-pic"/>
+                    </div>
+                    <div><h2 class="profile-name" id="ProfileName"></h2></div>
+
+                    <div class="accordion" id="personal-details">
+                        <div class="accordion-header">
+                            <span>Personal Details</span>
+                            <div class="accordion-controls">
+                                <i class="fa-solid fa-chevron-down"></i>
+                                <button class="toggle-btn" onclick="toggleSectionEditMode('personal-details', true)"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                                <button class="toggle-btn butt" onclick="saveProfileChanges('personal-details')" style="display:none;">Save Changes</button>
+                            </div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div><strong>First Name:</strong><input type="text" id="edit-firstName" disabled></div>
+                                <div><strong>Last Name:</strong><input type="text" id="edit-lastName" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>Gender:</strong>
+                                    <select id="edit-gender" disabled>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div><strong>DOB:</strong><input type="date" id="edit-dob" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>Permanent Address:</strong><input type="text" id="edit-permanentaddress" disabled></div>
+                                <div><strong>Current Address:</strong><input type="text" id="edit-currentaddress" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>PAN Number:</strong><input type="text" id="edit-pannumber" disabled></div>
+                                <div><strong>Aadhar Number:</strong><input type="text" id="edit-aadharnumber" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>Personal Email ID:</strong><input type="text" id="edit-email" disabled></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion" id="contact-details">
+                        <div class="accordion-header">
+                            <span>Contact Details</span>
+                             <div class="accordion-controls">
+                                <i class="fa-solid fa-chevron-down"></i>
+                                <button class="toggle-btn" onclick="toggleSectionEditMode('contact-details', true)"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                                <button class="toggle-btn butt" onclick="saveProfileChanges('contact-details')" style="display:none;">Save Changes</button>
+                            </div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div><strong>Contact Number:</strong> <input type="text" id="edit-contactnumber" disabled></div>
+                                <div><strong>Alternate Contact Number:</strong> <input type="text" id="edit-alternatecontactnumber" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>Alternate Contact Person:</strong> <input type="text" id="edit-alternatecontactperson" disabled></div>
+                                <div><strong>Alternate Contact Relationship:</strong> <input type="text" id="edit-alternatecontactrelation" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>Emergency Contact Number:</strong> <input type="text" id="edit-emergencynumber" disabled></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion" id="bank-details">
+                        <div class="accordion-header">
+                            <span>Bank Account Details</span>
+                            <div class="accordion-controls">
+                                <i class="fa-solid fa-chevron-down"></i>
+                                <button class="toggle-btn" onclick="toggleSectionEditMode('bank-details', true)"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                                <button class="toggle-btn butt" onclick="saveProfileChanges('bank-details')" style="display:none;">Save Changes</button>
+                            </div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div><strong>Account Number:</strong> <input type="text" id="edit-accountnumber" disabled></div>
+                                <div><strong>IFSC Code:</strong> <input type="text" id="edit-ifsccode" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>Account Holder Name:</strong><input type="text" id="edit-accountholdername" disabled></div>
+                                <div><strong>Branch:</strong><input type="text" id="edit-branch" disabled></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion" id="work-details">
+                        <div class="accordion-header">
+                            <span>Work Details</span>
+                            <div class="accordion-controls">
+                                <i class="fa-solid fa-chevron-down"></i>
+                                <button class="toggle-btn" onclick="toggleSectionEditMode('work-details', true)"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                                <button class="toggle-btn butt" onclick="saveProfileChanges('work-details')" style="display:none;">Save Changes</button>
+                            </div>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div><strong>Department:</strong><input type="text" id="edit-department" disabled></div>
+                                <div><strong>Reporting Manager-1:</strong><input type="text" id="edit-reportingmanager1" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>Reporting Manager-2:</strong><input type="text" id="edit-reportingmanager2" disabled></div>
+                                <div><strong>Employment Status:</strong><input type="text" id="edit-employment_status" disabled></div>
+                            </div>
+                            <div class="row">
+                                <div><strong>Employee Role:</strong><input type="text" id="edit-employeerole" disabled></div>
+                                <div><strong>Joining Date:</strong><input type="date" id="edit-joindate" disabled></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="change-password" class="hidden">
+                <div class="password-card">
+                    <br>
+                    <h2>Change Password</h2>
+                    <form id="changePasswordForm">
+                         <div class="row1">
+                            <label>Current Password*</label>
+                            <input type="password" id="change-current-password" required>
+                        </div>
+                        <div class="row1">
+                            <label>New Password*</label>
+                            <input type="password" id="change-new-password" required>
+                        </div>
+                        <div class="row1">
+                            <small>* password must be at least 8 characters long.</small>
+                        </div>
+                        <div class="row1">
+                            <label>Confirm New Password*</label><br>
+                            <input type="password" id="change-confirm-password" required>
+                        </div>
+                        <div class="row1">
+                            <button class="butt" type="reset"><i class="fa-solid fa-eraser"></i>Clear</button>
+                            <button class="butt" type="submit">Update Password</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="leave-application" class="hidden">
+                <div class="leave-header">
+                    <br>
+                    <h2>Apply Leave / History</h2>
+                    <button class="butto" type="clear"  onclick="openPopup()" style="background:#1a3962;"><i class="fa-solid fa-square-plus"></i> Apply Leave</button>
+                    <div class="overlay" id="popupOverlay">
+                        <div class="popup">
+                            <div class="popup-header">
+                                Apply Leave
+                                <span class="close-btn" onclick="closePopup()">&times;</span>
+                            </div>
+                            <div class="popup-content">
+                                <div class="form-row"><label>Email:</label><span id="leave-officialmail"></span></div>
+                                <div class="form-row"><label>Emp Code:</label><span id="leave-empcode"></span></div>
+                                <div class="form-row"><label>Emp Name:</label><span id="leave-fullname"></span></div>
+                                <div class="form-row"><label>Reporting Manager-1:</label><span id="leave-reportingmanager1"></span></div>
+                                <div class="form-row"><label>Reporting Manager-1 Mail:</label><span id="leave-reportingmanager1mail"></span></div>
+                                <div class="form-row"><label>Reporting Manager-2:</label><span id="leave-reportingmanager2"></span></div>
+                                <div class="form-row"><label>Reporting Manager-2 Mail:</label><span id="leave-reportingmanager2mail"></span></div>
+                                <div class="form-row">
+                                    <label>Select Leave Type <span style="color:red">*</span></label>
+                                    <select id="leave-type-select">
+                                        <option value="">Select</option>
+                                        <option value="Sick Leave">Sick Leave</option>
+                                        <option value="Casual Leave">Casual Leave</option>
+                                        <option value="Earned Leave">Earned Leave</option>
+                                        <option value="Paternity Leave">Paternity Leave</option>
+                                    </select>
+                                </div>
+                                <div class="form-row" style="display:flex; gap:10px; margin-top:15px;">
+                                    <label>From Date <span style="color:red">*</span></label>
+                                    <input type="date" id="leave-from-date">
+                                    <label>To Date <span style="color:red">*</span></label>
+                                    <input type="date" id="leave-to-date">
+                                </div>
+                                <div class="form-row">
+                                    <label>Description <span style="color:red">*</span></label>
+                                    <textarea rows="3" id="leave-description" required></textarea>
+                                </div>
+                                <div style="display:flex; justify-content: space-between; margin-top:10px;">
+                                    <button class="btn btn-close" onclick="closePopup()"><i class="fa-regular fa-circle-xmark"></i> Close</button>
+                                    <button class="btn btn-submit" onclick="submitLeave()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="butto" type="clear" onclick="openPopup1()" style="background:#2d9335;"><i class="fa-solid fa-square-plus"></i> Apply WFH</button>
+                    <div class="overlay" id="popupOverlay1">
+                        <div class="popup">
+                            <div class="popup-header">
+                                Apply WFH
+                                <span class="close-btn" onclick="closePopup1()">&times;</span>
+                            </div>
+                            <div class="popup-content">
+                                <div class="form-row"><label>Email:</label><span id="wfh-officialmail"></span></div>
+                                <div class="form-row"><label>Emp Code:</label><span id="wfh-empcode"></span></div>
+                                <div class="form-row"><label>Emp Name:</label><span id="wfh-fullname"></span></div>
+                                <div class="form-row"><label>Reporting Manager-1:</label><span id="wfh-reportingmanager1"></span></div>
+                                <div class="form-row"><label>Reporting Manager-1 Mail:</label><span id="wfh-reportingmanager1mail"></span></div>
+                                <div class="form-row"><label>Reporting Manager-2:</label><span id="wfh-reportingmanager2"></span></div>
+                                <div class="form-row"><label>Reporting Manager-2 Mail:</label><span id="wfh-reportingmanager2mail"></span></div>
+                                <div class="form-row" style="display:flex; gap:10px; margin-top:15px;">
+                                    <label>From Date <span style="color:red">*</span></label>
+                                    <input type="date" id="wfh-from-date">
+                                    <label>To Date <span style="color:red">*</span></label>
+                                    <input type="date" id="wfh-to-date">
+                                </div>
+                                <div class="form-row">
+                                    <label>Description <span style="color:red">*</span></label>
+                                    <textarea rows="3" id="wfh-description" required></textarea>
+                                </div>
+                                <div style="display:flex; justify-content: space-between; margin-top:15px;">
+                                    <button class="btn btn-close" onclick="closePopup1()"><i class="fa-regular fa-circle-xmark"></i> Close</button>
+                                    <button class="btn btn-submit" onclick="submitWFH()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="butto" type="clear" onclick="openCompoffEarnPopup()" style="background:#da5454;"><i class="fa-solid fa-square-plus"></i> Earn Comp-off</button>
+                    <div class="overlay" id="compoffEarnOverlay" style="display: none;">
+                        <div class="popup">
+                            <div class="popup-header">
+                                Earn Comp-off
+                                <span class="close-btn" onclick="closeCompoffEarnPopup()">&times;</span>
+                            </div>
+                            <div class="popup-content">
+                                <p>Apply to earn a comp-off day for working on a holiday or weekend.</p>
+                                <div class="form-row"><label>Email:</label><span id="compoff-earn-officialmail"></span></div>
+                                <div class="form-row"><label>Emp Code:</label><span id="compoff-earn-empcode"></span></div>
+                                <div class="form-row"><label>Emp Name:</label><span id="compoff-earn-fullname"></span></div>
+                                <div class="form-row">
+                                    <label>Working Date <span style="color:red">*</span></label>
+                                    <input type="date" id="compoff-earn-date">
+                                </div>
+                                <div class="form-row">
+                                    <label>Description <span style="color:red">*</span></label>
+                                    <textarea rows="3" id="compoff-earn-description" required></textarea>
+                                </div>
+                                <div style="display:flex; justify-content: space-between; margin-top:15px;">
+                                    <button class="btn btn-close" onclick="closeCompoffEarnPopup()"><i class="fa-regular fa-circle-xmark"></i> Close</button>
+                                    <button class="btn btn-submit" onclick="submitCompoffEarnRequest()">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="butto" type="clear" onclick="openPopup3()" style="background:#f28e29;"><i class="fa-solid fa-eye"></i> SSQ-Holiday List</button>
+                    <div class="overlay" id="popupOverlay3">
+                        <div class="popup">
+                            <div class="popup-header">
+                                Holiday List
+                                <span class="close-btn" onclick="closePopup3()">&times;</span>
+                            </div>
+                            <div class="popup-content">
+                                <a href="SSQ_Holiday List_2025.pdf" target="_blank">View SSQ Holiday List 2025</a>
+                                <div style="text-align: right; margin-top:15px;">
+                                    <button class="btn btn-close" onclick="closePopup3()">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="attendance-history" style="margin-top: 30px;">
+                    <h3>Leave & WFH History</h3>
+                    <table class="activities-table" id="leaveHistoryTable">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Days</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="leave-balance" class="hidden">
+                <div>
+                    <br />
+                    <h2>Leave Balance</h2>
+                </div>
+                <br />
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-header" style="background: #a9b6c7">Leave Balance</div>
+                        <div class="card-footer">
+                            <button onclick="showLeaveDetails('leave-balance-details')"><i class="fa fa-eye"></i> View</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" style="background: #4e7a50">WFH</div>
+                        <div class="card-footer">
+                            <button onclick="showLeaveDetails('wfh-details')"><i class="fa fa-eye"></i> View</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" style="background: #d4ad27">Comp-off</div>
+                        <div class="card-footer">
+                            <button onclick="showLeaveDetails('compoff-details')"><i class="fa fa-eye"></i> View</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="leave-balance-details" class="hidden">
+                <br />
+                <h2>Leave Balance Details</h2>
+                <div class="leave-card">
+                    <br />
+                    <h3>Your Leave Balance</h3>
+                    <table class="activities-table">
+                        <thead>
+                            <tr>
+                                <th>Leave Type</th>
+                                <th>Total Allotted</th>
+                                <th>Availed</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sick Leave</td>
+                                <td>8</td>
+                                <td>0</td>
+                                <td>8</td>
+                            </tr>
+                             <tr>
+                                <td>Casual Leave</td>
+                                <td>18</td>
+                                <td>0</td>
+                                <td>18</td>
+                            </tr>
+                            </tbody>
+                    </table>
+                    <br />
+                    <button class="btn btn-back" onclick="showMainLeaveBalance()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                </div>
+            </section>
+
+            <section id="wfh-details" class="hidden">
+                <br />
+                <h2>WFH Details</h2>
+                <div class="leave-card">
+                    <br />
+                    <h3>Your WFH Balance</h3>
+                    <table class="activities-table">
+                        <thead>
+                            <tr>
+                                <th>Leave Type</th>
+                                <th>Total Allotted</th>
+                                <th>Availed</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WFH</td>
+                                <td>12</td>
+                                <td>0</td>
+                                <td>12</td>
+                            </tr>
+                            </tbody>
+                    </table>
+                    <br />
+                    <button class="btn btn-back" onclick="showMainLeaveBalance()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                </div>
+            </section>
+
+            <section id="compoff-details" class="hidden">
+                <br />
+                <h2>Comp-off Details</h2>
+                <div class="leave-card">
+                    <br />
+                    <h3>Your Comp-off Balance</h3>
+                    <table class="activities-table">
+                        <thead>
+                            <tr>
+                                <th>Leave Type</th>
+                                <th>Total Allotted</th>
+                                <th>Availed</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Comp-off</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            </tbody>
+                    </table>
+                     <br />
+                    <button class="btn btn-back" onclick="showMainLeaveBalance()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                </div>
+            </section>
+            <section id="calender" class="hidden">
+                <br />
+                <h2>Calendar</h2>
+                <iframe src="https://calendar.google.com/calendar/embed?src=en.indian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FKolkata" style="border: 0" width="650" height="450" frameborder="0" scrolling="no"></iframe>
+            </section>
+
+            <section id="events" class="hidden">
+                <div>
+                    <br />
+                    <h2>Events</h2>
+                </div>
+                <div class="button-container" id="menuButtons">
+                    <button class="btn-custom btn-orange" onclick="showEventsSubSection('activities')">
+                        Activities
+                    </button>
+                    <button class="btn-custom btn-red" onclick="showEventsSubSection('rewards')">
+                        Rewards & Recognitions
+                    </button>
+                    <button class="btn-custom btn-dark" onclick="showEventsSubSection('trainings')">
+                        Trainings and Presentations
+                    </button>
+                </div>
+                <div id="activities" class="content-section hidden">
+                    <h1>Activities List</h1>
+                    <div class="search-box">
+                        <div class="search-header" onclick="toggleSearchBox('activities-body','activities-icon')">
+                            <span>Search previous year activities</span>
+                            <span id="activities-icon">▼</span>
+                        </div>
+                        <div class="search-body" id="activities-body">
+                            <label>From</label> <input type="date" /><br /><br />
+                            <label>To</label> <input type="date" /><br /><br />
+                            <button class="btn btn-search"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                            <button class="btn btn-clear"><i class="fa-solid fa-eraser"></i> Clear</button>
+                        </div>
+                    </div>
+                    <br />
+                    <h3>Current Year Activities :</h3>
+                    <table class="activities-table">
+                        <tr>
+                            <th>Activity Name</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Description</th>
+                        </tr>
+                    </table>
+                    <br />
+                    <button onclick="goBack()" class="btn btn-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                </div>
+                <div id="rewards" class="content-section hidden">
+                    <h1>Awards</h1>
+                    <div class="search-box">
+                        <div class="search-header" onclick="toggleSearchBox('rewards-body','rewards-icon')">
+                            <span>Search previous year awards</span>
+                            <span id="rewards-icon">▼</span>
+                        </div>
+                        <div class="search-body" id="rewards-body">
+                            <label>From</label> <input type="date" /><br /><br />
+                            <label>To</label> <input type="date" /><br /><br />
+                            <button class="btn btn-search"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                            <button class="btn btn-clear"><i class="fa-solid fa-eraser"></i> Clear</button>
+                        </div>
+                    </div>
+                    <br />
+                    <h3>Current Year Awards :</h3>
+                    <table class="activities-table">
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Month & Year</th>
+                            <th>Award</th>
+                            <th>Description</th>
+                        </tr>
+                    </table>
+                    <br />
+                    <button onclick="goBack()" class="btn btn-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                </div>
+                <div id="trainings" class="content-section hidden">
+                    <h1>Trainings and Presentations</h1>
+                    <div class="search-box">
+                        <div class="search-header" onclick="toggleSearchBox('trainings-body','trainings-icon')">
+                            <span>Search previous year trainings</span>
+                            <span id="trainings-icon">▼</span>
+                        </div>
+                        <div class="search-body" id="trainings-body">
+                            <label>From</label> <input type="date" /><br /><br />
+                            <label>To</label> <input type="date" /><br /><br />
+                            <button class="btn btn-search"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                            <button class="btn btn-clear"><i class="fa-solid fa-eraser"></i> Clear</button>
+                        </div>
+                    </div>
+                    <br />
+                    <h3>Current Year Trainings and Presentations :</h3>
+                    <table class="activities-table">
+                        <tr>
+                            <th>Trainer Name</th>
+                            <th>Topic</th>
+                            <th>Activity</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                        </tr>
+                    </table>
+                    <br />
+                    <button onclick="goBack()" class="btn btn-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                </div>
+            </section>
+
+           <section id="timings" class="hidden">
+                <div>
+                    <br />
+                    <h2>Employee Login/Logout</h2>
+                </div>
+                <div class="attendance-form" id="attendanceLoginContainer">
+                    <div class="attendance-header">Employee Attendance Login</div>
+                    <div class="attendance-body">
+                        <div class="form-group">
+                            <label for="date">Date <span style="color: red">*</span></label>
+                            <input type="date" id="attendanceDate" />
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Employee Name <span style="color: red">*</span></label>
+                            <input type="text" id="attendanceEmployeeName" value="username" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Work Location</label>
+                            <select id="attendanceWorkLocation">
+                                <option>-select-</option>
+                                <option>Office</option>
+                                <option>Client</option>
+                                <option>Remote</option>
+                                <option>Business</option>
+                                <option>Home</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-submit" id="recordLoginBtn"><i class="fa fa-sign-in"></i> Record Login</button>
+                </div>
+
+                <div class="attendance-history" style="margin-top: 30px;">
+                    <h3>Attendance History</h3>
+                    <table class="activities-table" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Login Time</th>
+                                <th>Employee Name</th>
+                                <th>Work Location</th>
+                                <th>Action</th>
+                                <th>Logout Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="admin-dashboard-section" class="hidden">
+                <h2>Admin Dashboard</h2>
+                <div class="dashboard-widgets">
+                    <div class="widget">
+                        <h3>Employee Count</h3>
+                        <p id="employee-count-widget">Loading...</p>
+                    </div>
+                    <div class="widget">
+                        <h3>Pending Leave Requests</h3>
+                        <p id="pending-leave-widget">Loading...</p>
+                    </div>
+                    <div class="widget">
+                        <h3>Pending Comp-off Requests</h3>
+                        <p id="pending-compoff-widget">Loading...</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-register-employee" class="hidden">
+                <div class="login-box1" id="adminRegisterBox">
+                    <div class="login-header1">ADMIN - REGISTER NEW EMPLOYEE</div>
+                    <div class="login-body1">
+                        <form id="adminRegisterForm">
+                            <div class="form-group-registation">
+                                <div><label>First Name*</label> <input type="text" id="admin-first_name" required /></div>
+                                <div><label>Last Name*</label> <input type="text" id="admin-last_name" required /></div>
+                                <div><label>Official Email (for Login)*</label> <input type="email" id="admin-reg_email" required /></div>
+                                <div><label>Temporary Password*</label> <input type="password" id="admin-reg_password" required /></div>
+                                <div><label>Join Date*</label> <input type="date" id="admin-join_date" required /></div>
+                                <div><label>Personal Email ID</label> <input type="email" id="admin-email" /></div>
+                                <div><label>Reporting Manager-1</label> <input type="text" id="admin-reporting_manager1" /></div>
+                                <div><label>Reporting Manager-1 Mail</label> <input type="email" id="admin-reporting_manager1_mail" /></div>
+                                <div><label>Reporting Manager-2</label> <input type="text" id="admin-reporting_manager2" /></div>
+                                <div><label>Reporting Manager-2 Mail</label> <input type="email" id="admin-reporting_manager2_mail" /></div>
+                            </div>
+                            <div class="form-footer1">
+                                <button type="reset" class="btn btn-clear">❌ Clear</button>
+                                <button type="submit" class="btn btn-login">➡️ Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="admin-manage-employees" class="hidden">
+                 <h2>Manage Employees</h2>
+                 <p>This section is under construction. It will allow the admin to view and edit employee details.</p>
+            </section>
+
+            <section id="admin-leave-requests" class="hidden">
+                <h2>Pending Leave Requests</h2>
+                <div class="attendance-history" style="margin-top: 20px; max-width: 90%;">
+                    <table class="activities-table" id="leaveRequestsTable">
+                        <thead>
+                            <tr>
+                                <th>Emp Code</th>
+                                <th>Emp Name</th>
+                                <th>Emp Email</th>
+                                <th>Reporting Manager-1</th>
+                                <th>Reporting Manager-2</th>
+                                <th>Leave Type</th>
+                                <th>Days</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaveRequestsTableBody">
+                            <tr><td colspan="11">No pending leave requests.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="admin-compoff-requests" class="hidden">
+                <h2>Pending Comp-off Requests</h2>
+                <div class="attendance-history" style="margin-top: 20px; max-width: 90%;">
+                    <table class="activities-table" id="compoffRequestsTable">
+                        <thead>
+                            <tr>
+                                <th>Emp Code</th>
+                                <th>Emp Name</th>
+                                <th>Emp Email</th>
+                                <th>Working Date</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="compoffRequestsTableBody">
+                            <tr><td colspan="6">No pending comp-off requests.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="admin-reset-password" class="hidden">
+                <h2>Reset Employee Password</h2>
+                <div class="password-card">
+                    <p>Enter the employee's email and set a new temporary password. The employee will be required to change this password upon their next login.</p>
+                    <form id="adminResetPasswordForm">
+                        <div class="row1">
+                            <label>Employee Email*</label>
+                            <input type="email" id="admin-reset-email" required>
+                        </div>
+                        <div class="row1">
+                            <label>New Password*</label>
+                            <input type="password" id="admin-reset-new-password" required>
+                        </div>
+                        <div class="row1">
+                            <small>* password must be at least 8 characters long.</small>
+                        </div>
+                        <div class="row1">
+                            <label>Confirm New Password*</label><br>
+                            <input type="password" id="admin-reset-confirm-password" required>
+                        </div>
+                        <div class="row1">
+                            <button class="butt" type="reset"><i class="fa-solid fa-eraser"></i>Clear</button>
+                            <button class="butt" type="submit" style="background-color: #b71c1c;">Reset Password</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="customAlert" class="overlay" style="justify-content:center; align-items:center; z-index: 9999;">
+      <div class="popup" style="width: auto; min-width: 300px; max-width: 90%; text-align: center;">
+        <p id="customAlertMessage" style="margin-bottom:20px; font-size:16px;"></p>
+        <div class="alert-button-container">
+            <button id="customAlertCloseBtn" class="btn btn-submit">OK</button>
+            <button id="customConfirmCancelBtn" class="btn btn-close" style="display:none;">Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+  <div id="commentPopup" class="popup-overlay" style="display: none;">
+    <div class="popup-content">
+        <h3>Add Comment</h3>
+        <textarea id="commentTextarea" placeholder="Enter your comment here..."></textarea>
+        <div class="popup-buttons">
+            <button id="submitCommentBtn" class="btn btn-submit">Submit</button>
+            <button id="closeCommentPopupBtn" class="btn btn-clear">Cancel</button>
+        </div>
+    </div>
+  </div> 
+
+    <div id="forgotPasswordPopup" class="overlay" style="display:none; justify-content:center; align-items:center; z-index: 9998;">
+      <div class="popup" style="width: 400px;">
+        <div class="popup-header">
+            Reset Password
+            <span class="close-btn" onclick="closeForgotPasswordPopup()">&times;</span>
+        </div>
+        <form id="forgotPasswordForm" style="padding: 15px;">
+            <p>Enter your email address and we will send you a new temporary password.</p>
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="forgot-email" placeholder="your.email@example.com" required>
+            </div>
+            <button type="submit" class="btn btn-login">Send Reset Email</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="forceChangePasswordPopup" class="overlay" style="display:none; justify-content:center; align-items:center; z-index: 9999;">
+      <div class="popup" style="width: 450px;">
+        <div class="popup-header">
+            Set Your New Password
+        </div>
+        <form id="forceChangePasswordForm" style="padding: 20px;">
+            <p>Welcome! As a security measure, you must set a new password before you can log in for the first time.</p>
+            <input type="hidden" id="force-change-user-id">
+            <div class="form-group">
+                <label>New Password <span style="color: red">*</span></label>
+                <input type="password" id="force-new-password" placeholder="Enter your new password" required>
+                <small style="display: block; margin-top: 5px;">Password must be at least 8 characters long.</small>
+            </div>
+            <div class="form-group">
+                <label>Confirm New Password <span style="color: red">*</span></label>
+                <input type="password" id="force-confirm-password" placeholder="Confirm your new password" required>
+            </div>
+            <div style="text-align: right; margin-top: 15px;">
+                 <button type="submit" class="btn btn-login">Set Password and Login</button>
+            </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="hello.js" defer></script>
+</body>
+</html>
