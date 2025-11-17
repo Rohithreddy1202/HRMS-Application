@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import sqlite3
 from datetime import datetime
@@ -25,7 +25,15 @@ app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')
 
 mail = Mail(app)
+@app.route('/')
+def serve_index():
+    # This serves the main HTML file when someone visits the root URL
+    return send_from_directory('.', 'hello.html')
 
+@app.route('/<path:path>')
+def serve_static_files(path):
+    # This serves other files like hello.js, hello.css, and any images
+    return send_from_directory('.', path)
 DATABASE = 'hrms.db'
 
 # --- SECURE: Admin Configuration from Environment Variables ---
@@ -713,6 +721,29 @@ def get_employee_attendance(employee_id):
         attendance_list.append(record_dict)
     return jsonify(attendance_list), 200
 
+# NEW: Admin endpoint to view all attendance records
+@app.route('/admin/attendance-records', methods=['GET'])
+def get_all_attendance_records():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute('''
+            SELECT ar.date, ar.login_time, ar.work_location, ar.logout_time, e.first_name, e.last_name
+            FROM attendance_records ar
+            JOIN employees e ON ar.employee_id = e.id
+            ORDER BY ar.date DESC, ar.login_time DESC
+        ''')
+        records = [dict(row) for row in cursor.fetchall()]
+        for record in records:
+            record['employee_name'] = f"{record.pop('first_name')} {record.pop('last_name')}"
+        return jsonify(records), 200
+    except sqlite3.Error as e:
+        return jsonify({"message": f"Database error: {e}"}), 500
+    finally:
+        conn.close()
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True, port=5000)
+    #app.run(host='0.0.0.0',debug=True, port=8000)
+    

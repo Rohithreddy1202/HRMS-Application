@@ -80,6 +80,7 @@
                 <li data-section="admin-manage-employees"><i class="fa-solid fa-users"></i> Manage Employees</li>
                 <li data-section="admin-leave-requests"><i class="fa-solid fa-envelope-open-text"></i> Leave Requests</li>
                 <li data-section="admin-compoff-requests"><i class="fa-solid fa-calendar-check"></i> Comp-off Requests</li>
+                <li data-section="admin-attendance-records"><i class="fa-solid fa-clock"></i> Attendance Records</li>
                 <li data-section="admin-reset-password"><i class="fa-solid fa-key"></i> Reset Employee Password</li>
             </ul>
         </nav>
@@ -760,6 +761,26 @@
                         </thead>
                         <tbody id="compoffRequestsTableBody">
                             <tr><td colspan="6">No pending comp-off requests.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="admin-attendance-records" class="hidden">
+                <h2>All Employee Attendance Records</h2>
+                <div class="attendance-history" style="margin-top: 20px; max-width: 90%;">
+                    <table class="activities-table" id="adminAttendanceTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Employee Name</th>
+                                <th>Login Time</th>
+                                <th>Work Location</th>
+                                <th>Logout Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminAttendanceTableBody">
+                            <tr><td colspan="5">Loading records...</td></tr>
                         </tbody>
                     </table>
                 </div>

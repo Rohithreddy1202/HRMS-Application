@@ -4,8 +4,6 @@ let currentLeaveRequest = null; // Store the current request for the comment pop
 
 // Base URL for your Python Flask backend
 const API_BASE_URL = 'http://127.0.0.1:5000'; // Make sure this matches your Flask server's address
-
-// A list of holidays for calculation (yyyy-mm-dd format)
 const HOLIDAYS = [
   '2025-01-26', '2025-03-14', '2025-03-31', '2025-04-18', '2025-08-15',
   '2025-10-02', '2025-10-20', '2025-12-25'
@@ -637,6 +635,7 @@ function showSection(sectionId) {
         if (sectionId === 'admin-dashboard-section') loadAdminDashboardStats();
         if (sectionId === 'admin-leave-requests') loadLeaveRequests();
         if (sectionId === 'admin-compoff-requests') loadCompoffRequests();
+        if (sectionId === 'admin-attendance-records') loadAdminAttendanceRecords();
     }
 }
 
@@ -791,6 +790,33 @@ async function loadAttendanceRecords(employeeId) {
         tableBody.innerHTML = '<tr><td colspan="6" style="color:red;">Failed to load attendance records.</td></tr>';
     }
 }
+
+// NEW: Function to load all attendance records for the admin
+async function loadAdminAttendanceRecords() {
+    const tableBody = document.getElementById('adminAttendanceTableBody');
+    if (!tableBody) return;
+    tableBody.innerHTML = '<tr><td colspan="5">Loading attendance records...</td></tr>';
+    try {
+        const records = await makeApiRequest(`${API_BASE_URL}/admin/attendance-records`, { method: 'GET' });
+        tableBody.innerHTML = ''; // Clear loading message
+        if (records && records.length > 0) {
+            records.forEach(record => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = record.date;
+                row.insertCell(1).textContent = record.employee_name;
+                row.insertCell(2).textContent = record.login_time;
+                row.insertCell(3).textContent = record.work_location;
+                row.insertCell(4).textContent = record.logout_time || 'Active'; // Show 'Active' if logout_time is null
+            });
+        } else {
+            tableBody.innerHTML = '<tr><td colspan="5">No attendance records found.</td></tr>';
+        }
+    } catch (error) {
+        console.error("Failed to load admin attendance records:", error);
+        tableBody.innerHTML = '<tr><td colspan="5" style="color:red;">Failed to load attendance records.</td></tr>';
+    }
+}
+
 
 document.getElementById('changePasswordForm')?.addEventListener('submit', async function(event) {
     event.preventDefault();
